@@ -1,21 +1,21 @@
 class School
-  attr_reader :stutents
-
   def initialize
-    @stutents = {}
+    @roster = {}
   end
 
   def to_h
-    stutents.values.each(&:sort!)
-    stutents.sort.to_h
+    roster.sort.to_h.each { |_, grade| grade.sort! }
   end
 
   def add(name, grade)
-    grade = stutents[grade] ||= []
-    grade << name
+    roster[grade] = (grades(grade) << name)
   end
 
-  def grade(number)
-    stutents[number] || []
+  def grades(grade)
+    roster.fetch(grade, [])
   end
+
+  private
+
+  attr_reader :roster
 end

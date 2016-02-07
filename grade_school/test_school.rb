@@ -35,11 +35,11 @@ class SchoolTest < Minitest::Test
     school.add('Bradley', 5)
     school.add('Franklin', 5)
     school.add('Jeff', 1)
-    assert_equal %w(Bradley Franklin), school.grade(5)
+    assert_equal %w(Bradley Franklin), school.grades(5)
   end
 
   def test_get_students_in_a_non_existant_grade
-    assert_equal [], school.grade(1)
+    assert_equal [], school.grades(1)
   end
 
   def test_sort_school # rubocop:disable Metrics/MethodLength

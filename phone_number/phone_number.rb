@@ -4,9 +4,7 @@ class PhoneNumber
   end
   
   def number
-    @number.gsub!(/\W/, '')
-    @number.slice!(/(^1)\d{10}/, 1)
-    @number.match(/^\d+$/) && @number.size == 10  ? @number : '0' * 10
+    valid_number || '0' * 10
   end
   
   def area_code
@@ -14,6 +12,13 @@ class PhoneNumber
   end
   
   def to_s
-    "(#{number[0,3]}) #{number[3, 3]}-#{number[6, 4]}"
+    print_number = number
+    "(#{print_number[0,3]}) #{print_number[3, 3]}-#{print_number[6, 4]}"
+  end
+  
+  private
+  
+  def valid_number
+    /^\(?1?(\d{3})\W{0,2}(\d{3})\W?(\d{4})$/.match(@number)&.captures&.join
   end
 end

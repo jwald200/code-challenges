@@ -15,12 +15,12 @@ class Palindromes
   end
 
   def largest
-    @palindromics.select! {|palindromic| palindromic.reduce(:*) == max_value }
+    keep_only!(max_value)
     self
   end
 
   def smallest
-    @palindromics.select! {|palindromic| palindromic.reduce(:*) == min_value }
+    keep_only!(min_value)
     self
   end
 
@@ -34,6 +34,11 @@ class Palindromes
 
   private
 
+  def palindrome?(value)
+    value = value.to_s
+    value == value.reverse
+  end
+
   def values
     @palindromics.map { |palindromic| palindromic.reduce(:*) }
   end
@@ -46,8 +51,7 @@ class Palindromes
     values.min
   end
 
-  def palindrome?(value)
-    value = value.to_s
-    value == value.reverse
+  def keep_only!(value)
+    @palindromics.keep_if {|palindromic| palindromic.reduce(:*) == value }
   end
 end

@@ -42,14 +42,15 @@ class Palindrome
   end
   
   def factors
-    dividers.map do |num|
-      [num , value / num].sort
-    end.uniq
+    dividers.map { |divider| [divider , value / divider] }
   end
   
   private
   
   def dividers
-    (@min..@max).select { |num| value % num == 0 && value/num <= @max }
+    (@min..@max).select do |divider|
+     result = value/divider
+     value % divider == 0 && result <= @max && result >= divider
+    end
   end
 end

@@ -1,57 +1,55 @@
 class Palindromes
   def initialize(options = {})
     @min_factor = options[:min_factor] || 1
-    @max_factor = options[:max_factor] || 99
-    @palindromics = []
+    @max_factor = options[:max_factor]
+    @palindromes = []
   end
 
   def generate
     @min_factor.upto(@max_factor) do |factor_a|
       factor_a.upto(@max_factor) do |factor_b|
-        factors = [factor_a, factor_b]
-        @palindromics << factors if palindrome?(factors.reduce(:*))
+        value = factor_a*factor_b
+        if palindrome?(value)
+          @palindromes << Palindrome.new(value, @min_factor, @max_factor)
+        end
       end
     end
   end
 
   def largest
-    keep_only!(max_value)
-    self
+    @palindromes.max_by(&:value)
   end
 
   def smallest
-    keep_only!(min_value)
-    self
+    @palindromes.first
   end
-
-  def factors
-    @palindromics
-  end
-
-  def value
-    values.first
-  end
-
+  
   private
 
   def palindrome?(value)
     value = value.to_s
     value == value.reverse
   end
+end
 
-  def values
-    @palindromics.map { |palindromic| palindromic.reduce(:*) }
+class Palindrome
+  attr_reader :value
+  
+  def initialize(value, min, max)
+    @value = value
+    @min = min
+    @max = max
   end
-
-  def max_value
-    values.max
+  
+  def factors
+    dividers.map do |num|
+      [num , value / num].sort
+    end.uniq
   end
-
-  def min_value
-    values.min
-  end
-
-  def keep_only!(value)
-    @palindromics.keep_if {|palindromic| palindromic.reduce(:*) == value }
+  
+  private
+  
+  def dividers
+    (@min..@max).select { |num| value % num == 0 && value/num <= @max }
   end
 end
